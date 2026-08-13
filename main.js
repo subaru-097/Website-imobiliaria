@@ -1,5 +1,5 @@
 /* ==========================================================================
-   A3 ESTÉTICA AUTOMOTIVA - MAIN JAVASCRIPT LOGIC
+   EDULOS IMOBILIÁRIA - MAIN JAVASCRIPT LOGIC
    - Lenis Smooth Scroll Integration with GSAP Ticker
    - Apple-style WebP Canvas Frame Scrubbing (Cover Aspect Ratio)
    - Preload Progress Bar & Loader Feedback
@@ -14,22 +14,26 @@ document.addEventListener('DOMContentLoaded', () => {
     return;
   }
 
-  // Registrar o plugin ScrollTrigger no GSAP
+  // Registrar o plugin ScrollTrigger no GSAP e otimizar para navegadores mobile
   gsap.registerPlugin(ScrollTrigger);
+  ScrollTrigger.config({ ignoreMobileResize: true });
 
   // --------------------------------------------------------------------------
-  // 1. INICIALIZAÇÃO DO LENIS (SMOOTH SCROLL) E SINCRONIZAÇÃO COM GSAP
+  // 1. INICIALIZAÇÃO DO LENIS (SMOOTH SCROLL EM DESKTOP PARA FLUIDEZ COMPLETA)
   // --------------------------------------------------------------------------
   let lenis = null;
+  const isMobileScreen = window.innerWidth < 768;
 
-  if (typeof Lenis !== 'undefined') {
+  if (typeof Lenis !== 'undefined' && !isMobileScreen) {
     lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
-      wheelMultiplier: 1.0,
-      touchMultiplier: 1.5
+      wheelMultiplier: 1.0
     });
+
+    // Pausa a rolagem do Lenis enquanto o loader estiver na tela
+    lenis.stop();
 
     // Atualiza os triggers do ScrollTrigger sempre que o Lenis rolar a página
     lenis.on('scroll', ScrollTrigger.update);
@@ -41,6 +45,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Desativa o lagSmoothing do GSAP para manter sincronia perfeita
     gsap.ticker.lagSmoothing(0);
+  } else {
+    document.documentElement.style.scrollBehavior = 'smooth';
   }
 
   /**
@@ -97,9 +103,82 @@ document.addEventListener('DOMContentLoaded', () => {
   // --------------------------------------------------------------------------
   const heroCanvas = document.getElementById('heroCanvas');
   const heroSection = document.getElementById('hero');
-  const loader = document.getElementById('canvasLoader');
+
+  // Loader elements da nova tela premium Split Curtain
+  const siteLoaderContainer = document.getElementById('siteLoaderContainer');
+  const siteLoaderContent = document.getElementById('siteLoaderContent');
+  const siteLoaderTop = document.getElementById('siteLoaderTop');
+  const siteLoaderBottom = document.getElementById('siteLoaderBottom');
   const loaderBar = document.getElementById('loaderBar');
   const loaderPercent = document.getElementById('loaderPercent');
+
+  let isLoaderDismissed = false;
+  let isAnimationCreated = false;
+
+  // Função de transição Split Curtain ao atingir 100%
+  function triggerSplitCurtainLoader() {
+    if (isLoaderDismissed) return;
+    isLoaderDismissed = true;
+
+    if (!siteLoaderContainer) return;
+
+    if (typeof gsap !== 'undefined') {
+      const tl = gsap.timeline({
+        onComplete: () => {
+          siteLoaderContainer.style.display = 'none';
+          siteLoaderContainer.style.pointerEvents = 'none';
+            
+          // Reativar Lenis e recarregar ScrollTrigger com precisão absoluta
+          if (lenis) {
+            lenis.start();
+            lenis.resize();
+          }
+          if (typeof ScrollTrigger !== 'undefined') {
+            ScrollTrigger.refresh(true);
+          }
+        }
+      });
+
+      // 1. Fade out sutil do conteúdo central (Texto Gold + Barra + Porcentagem)
+      if (siteLoaderContent) {
+        tl.to(siteLoaderContent, {
+          opacity: 0,
+          scale: 0.95,
+          duration: 0.35,
+          ease: "power2.out"
+        });
+      }
+
+      // 2. Transição Efeito Split: Metade Superior sobe e Metade Inferior desce
+      if (siteLoaderTop && siteLoaderBottom) {
+        tl.to(siteLoaderTop, {
+          yPercent: -100,
+          duration: 0.95,
+          ease: "power3.inOut"
+        }, "-=0.1");
+
+        tl.to(siteLoaderBottom, {
+          yPercent: 100,
+          duration: 0.95,
+          ease: "power3.inOut"
+        }, "<");
+      } else {
+        tl.to(siteLoaderContainer, { opacity: 0, duration: 0.5 });
+      }
+    } else {
+      if (siteLoaderContent) siteLoaderContent.style.opacity = '0';
+      if (siteLoaderTop) siteLoaderTop.style.transform = 'translateY(-100%)';
+      if (siteLoaderBottom) siteLoaderBottom.style.transform = 'translateY(100%)';
+      setTimeout(() => {
+        if (siteLoaderContainer) {
+          siteLoaderContainer.style.display = 'none';
+          siteLoaderContainer.style.pointerEvents = 'none';
+        }
+        if (lenis) lenis.start();
+        if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh(true);
+      }, 1000);
+    }
+  }
 
   if (heroCanvas && heroSection) {
     const ctx = heroCanvas.getContext('2d');
@@ -166,7 +245,25 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     function drawCurrentFrame() {
-      const index = Math.min(totalFrames - 1, Math.max(0, Math.floor(playhead.frame)));
+      let index = Math.min(totalFrames - 1, Math.max(0, Math.floor(playhead.frame)));
+
+      // Fallback para a imagem carregada mais próxima se o frame exato ainda estiver baixando
+      if (!images[index]) {
+        let fallbackIndex = index;
+        while (fallbackIndex >= 0 && !images[fallbackIndex]) {
+          fallbackIndex--;
+        }
+        if (fallbackIndex < 0) {
+          fallbackIndex = index;
+          while (fallbackIndex < totalFrames && !images[fallbackIndex]) {
+            fallbackIndex++;
+          }
+        }
+        if (images[fallbackIndex]) {
+          index = fallbackIndex;
+        }
+      }
+
       if (images[index]) {
         drawCoverImage(ctx, heroCanvas, images[index]);
       }
@@ -175,36 +272,24 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
 
-    let isAnimationCreated = false;
-
     // Inicializa a animação no GSAP com ScrollTrigger & Pinning expandido para os 303 frames
     function initHeroScrollAnimation() {
       if (isAnimationCreated) return;
       isAnimationCreated = true;
 
-      // Animação de ocultar o Loader ao concluir 100%
-      if (loader) {
-        gsap.to(loader, {
-          opacity: 0,
-          scale: 0.9,
-          duration: 0.5,
-          ease: "power2.out",
-          onComplete: () => {
-            loader.style.display = 'none';
-          }
-        });
-      }
-
       drawCurrentFrame();
 
-      // Timeline GSAP: "Pina" a seção Hero e estende a distância de scroll até o final do video_frames4
+      // Timeline GSAP: "Pina" a seção Hero e executa a sequência de entrar na casa no scroll
+      const isMobile = window.innerWidth < 768;
+      const pinDistance = isMobile ? "+=1800" : "+=3400"; // Distância de scroll para o scrubbing de zoom da casa
+
       const heroTl = gsap.timeline({
         scrollTrigger: {
           trigger: heroSection,
           start: "top top",
-          end: "+=3400", // Distância estendida para garantir o scrubbing completo de todos os 303 frames
+          end: pinDistance,
           pin: true,
-          scrub: 0.05, // Scrub fluido e responsivo ao movimento da roda do mouse
+          scrub: isMobile ? 0.1 : 0.05,
           anticipatePin: 1,
           onUpdate: () => drawCurrentFrame()
         }
@@ -227,7 +312,20 @@ document.addEventListener('DOMContentLoaded', () => {
       ScrollTrigger.refresh();
     }
 
-    // Preload de todas as imagens das 4 pastas com atualização do Loader
+    // Atualização de progresso e preload das imagens das 4 pastas
+    const updateProgress = () => {
+      const percent = Math.min(100, Math.round((loadedCount / totalFrames) * 100));
+      if (loaderBar) loaderBar.style.width = percent + '%';
+      if (loaderPercent) loaderPercent.innerText = percent + '%';
+
+      if (percent >= 100 || loadedCount >= totalFrames) {
+        if (typeof ScrollTrigger !== 'undefined') {
+          ScrollTrigger.refresh();
+        }
+        setTimeout(triggerSplitCurtainLoader, 250);
+      }
+    };
+
     frameCandidatesList.forEach((candidates, index) => {
       loadImageWithFallback(
         candidates,
@@ -235,23 +333,39 @@ document.addEventListener('DOMContentLoaded', () => {
           images[index] = img;
           loadedCount++;
 
-          const percent = Math.round((loadedCount / totalFrames) * 100);
-          if (loaderBar) loaderBar.style.width = percent + '%';
-          if (loaderPercent) loaderPercent.innerText = percent + '%';
+          updateProgress();
 
-          if (index === 0) drawCurrentFrame();
-          if (loadedCount >= totalFrames) initHeroScrollAnimation();
+          if (index === 0) {
+            drawCurrentFrame();
+            initHeroScrollAnimation();
+          }
+          if (loadedCount >= totalFrames || loadedCount >= 10) {
+            initHeroScrollAnimation();
+          }
         },
         () => {
           loadedCount++;
-          const percent = Math.round((loadedCount / totalFrames) * 100);
-          if (loaderBar) loaderBar.style.width = percent + '%';
-          if (loaderPercent) loaderPercent.innerText = percent + '%';
+          updateProgress();
 
-          if (loadedCount >= totalFrames) initHeroScrollAnimation();
+          if (loadedCount >= totalFrames || loadedCount >= 10) {
+            initHeroScrollAnimation();
+          }
         }
       );
     });
+
+    // Trava de segurança para garantir a execução do efeito split em até 3 segundos
+    window.addEventListener('load', () => {
+      if (loaderBar) loaderBar.style.width = '100%';
+      if (loaderPercent) loaderPercent.innerText = '100%';
+      setTimeout(triggerSplitCurtainLoader, 350);
+    });
+
+    setTimeout(() => {
+      if (loaderBar) loaderBar.style.width = '100%';
+      if (loaderPercent) loaderPercent.innerText = '100%';
+      triggerSplitCurtainLoader();
+    }, 3000);
   }
 
   // --------------------------------------------------------------------------

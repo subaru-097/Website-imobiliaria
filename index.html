@@ -4,8 +4,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Imobiliária sara | Encontre seu imóvel</title>
-  <meta name="description" content="A melhor imobiliária da região. Encontre a casa dos seus sonhos.">
+  <title>Edulos Imobiliária | Encontre seu imóvel</title>
+  <meta name="description" content="Edulos Imobiliária - Encontre o imóvel dos seus sonhos com curadoria exclusiva e alto padrão.">
+  <meta property="og:title" content="Edulos Imobiliária | Encontre seu imóvel">
+  <meta property="og:description" content="Edulos Imobiliária - Encontre o imóvel dos seus sonhos com curadoria exclusiva e alto padrão.">
+  <meta property="og:site_name" content="Edulos Imobiliária">
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -58,6 +61,31 @@
 
 <body class="bg-[#F5F5F7] text-[#1D1D1F] antialiased selection:bg-[#1D1D1F] selection:text-white">
 
+  <!-- TELA DE CARREGAMENTO PREMIUM (SPLIT CURTAIN LOADING SCREEN) -->
+  <div id="siteLoaderContainer" class="fixed inset-0 z-[99999] pointer-events-auto overflow-hidden">
+    <!-- Metade Superior (Split Curtain Top) -->
+    <div id="siteLoaderTop" class="absolute top-0 left-0 w-full h-[50vh] bg-black border-b border-[#C5A059]/20"></div>
+
+    <!-- Metade Inferior (Split Curtain Bottom) -->
+    <div id="siteLoaderBottom" class="absolute bottom-0 left-0 w-full h-[50vh] bg-black border-t border-[#C5A059]/20"></div>
+
+    <!-- Conteúdo Central (Texto Gold + Barra + Porcentagem) -->
+    <div id="siteLoaderContent" class="fixed inset-0 z-[100000] flex flex-col items-center justify-center text-center px-6 pointer-events-none font-sans">
+      <!-- Marca em Dourado Elegante -->
+      <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-[0.25em] uppercase shimmer-gold-text mb-6">
+        EDULOS IMOBILIÁRIA
+      </h2>
+
+      <!-- Barra de Carregamento Fina e Elegante -->
+      <div class="w-64 sm:w-80 h-1 bg-white/10 rounded-full overflow-hidden mb-3 relative border border-white/5 shadow-inner">
+        <div id="loaderBar" class="h-full bg-gradient-to-r from-[#BF953F] via-[#FCF6BA] to-[#B38728] w-0 transition-all duration-150 ease-out shadow-[0_0_12px_rgba(197,160,89,0.8)]"></div>
+      </div>
+
+      <!-- Porcentagem em Tempo Real -->
+      <span id="loaderPercent" class="text-xs sm:text-sm font-mono tracking-widest text-[#C5A059]/80 font-semibold">0%</span>
+    </div>
+  </div>
+
 
 
   <!-- SESSÃO 1: HERO SECTION (A CHEGADA DA SVJ - CANVAS 60FPS FRAME SCRUBBING) -->
@@ -68,45 +96,49 @@
     <!-- Dark Luxury Gradients Overlay (Película Escura Restaurada) -->
     <div class="hero-overlay"></div>
 
-    <!-- HUD Loader de Preload dos Frames -->
-    <div id="canvasLoader"
-      class="absolute z-20 flex flex-col items-center gap-3 px-6 py-4 glass-panel rounded-2xl border border-cyber-emerald/40 text-center">
-      <div class="hud-text text-xs text-cyber-emerald flex items-center gap-2">
-        <span class="w-2.5 h-2.5 rounded-full bg-cyber-emerald animate-ping"></span>
-        CARREGANDO ANIMAÇÃO SVJ... <span id="loaderPercent">0%</span>
-      </div>
-      <div class="w-56 h-2 bg-gray-800 rounded-full overflow-hidden">
-        <div id="loaderBar"
-          class="h-full bg-gradient-to-r from-cyber-emerald to-cyber-cyan w-0 transition-all duration-100"></div>
-      </div>
-    </div>
-
     <!-- Bloco de Texto Editorial Sobreposto (Hero) -->
-    <div class="absolute top-1/3 left-8 md:left-24 z-50 flex flex-col items-start">
+    <div class="hero-editorial-block absolute top-[22%] sm:top-1/3 left-5 sm:left-8 md:left-24 pr-5 sm:pr-0 max-w-[calc(100%-2.5rem)] sm:max-w-md z-50 flex flex-col items-start">
       <!-- Tag Superior / Pill Badge -->
-      <div class="bg-white text-black rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-wider inline-block">
-        A3 Estética Automotiva
+      <div class="bg-white text-black rounded-full px-3.5 py-1 sm:px-4 sm:py-1.5 text-[11px] sm:text-xs font-bold uppercase tracking-wider inline-block shadow-sm">
+        EDULOS IMOBILIÁRIA
       </div>
 
       <!-- Título Principal (H1) -->
-      <h1 class="text-5xl md:text-7xl font-medium tracking-tight text-white leading-[1.1] mt-6">
+      <h1 class="hero-title-mobile text-[28px] sm:text-5xl md:text-7xl font-medium tracking-tight text-white leading-[1.15] mt-3.5 sm:mt-6">
         A Arte da Perfeição<br />em Cada Detalhe
       </h1>
 
       <!-- Subtítulo -->
-      <p class="text-white/80 text-sm md:text-base max-w-md mt-6 font-sans">
-        Estética automotiva premium e detalhamento exclusivo. O seu veículo tratado como uma verdadeira obra de arte.
+      <p class="hero-subtitle-mobile text-white/80 text-[13px] sm:text-sm md:text-base max-w-xs sm:max-w-md mt-3 sm:mt-6 font-sans leading-relaxed">
+        Assessoria imobiliária de alto padrão e atendimento exclusivo. O imóvel dos seus sonhos tratado com extrema perfeição.
       </p>
 
       <!-- Botões (CTA) -->
-      <div class="flex gap-4 mt-8">
-        <a href="#servicos"
-          class="bg-black/80 backdrop-blur border border-white/10 text-white px-6 py-3 rounded-md text-sm font-medium hover:bg-black transition-all">
-          Nossos Serviços
+      <div class="hero-cta-mobile flex flex-col sm:flex-row gap-2.5 sm:gap-3.5 mt-5 sm:mt-8 w-full sm:w-auto">
+        <!-- Botão 1: Nossos Serviços (Escuro / Odômetro Roll) -->
+        <a href="#servicos" class="hero-btn-odometer hero-btn-dark group relative inline-flex items-center justify-center gap-2.5 px-5 py-2 sm:px-6 sm:py-2.5 rounded-full text-[11px] font-bold uppercase tracking-[1.5px] text-white bg-[#1D1D1F]/90 border border-white/25 backdrop-blur-md overflow-hidden transition-all duration-300 shadow-md">
+          <span class="odometer-window relative h-[16px] overflow-hidden block z-10">
+            <span class="odometer-track flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-1/2">
+              <span class="h-[16px] flex items-center leading-none">Nossos Serviços</span>
+              <span class="h-[16px] flex items-center leading-none">Nossos Serviços</span>
+            </span>
+          </span>
+          <span class="roulette-icon relative z-10 inline-flex items-center justify-center w-5 h-5 rounded-full bg-white/15 text-white transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:bg-white group-hover:text-[#1D1D1F]">
+            <i class="fa-solid fa-arrow-right text-[9px]"></i>
+          </span>
         </a>
-        <a href="#servicos"
-          class="bg-white text-black px-6 py-3 rounded-md text-sm font-medium hover:bg-gray-200 transition-all">
-          Agendar Vistoria
+
+        <!-- Botão 2: Agendar Vistoria (Claro / Odômetro Roll) -->
+        <a href="#servicos" class="hero-btn-odometer hero-btn-light group relative inline-flex items-center justify-center gap-2.5 px-5 py-2 sm:px-6 sm:py-2.5 rounded-full text-[11px] font-bold uppercase tracking-[1.5px] text-[#1D1D1F] bg-white border border-white shadow-md overflow-hidden transition-all duration-300">
+          <span class="odometer-window relative h-[16px] overflow-hidden block z-10">
+            <span class="odometer-track flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-1/2">
+              <span class="h-[16px] flex items-center leading-none">Agendar Vistoria</span>
+              <span class="h-[16px] flex items-center leading-none">Agendar Vistoria</span>
+            </span>
+          </span>
+          <span class="roulette-icon relative z-10 inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#1D1D1F]/10 text-[#1D1D1F] transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:bg-[#1D1D1F] group-hover:text-white">
+            <i class="fa-solid fa-calendar-check text-[9px]"></i>
+          </span>
         </a>
       </div>
     </div>
@@ -598,7 +630,7 @@
         <div
           class="property-card group bg-white rounded-2xl overflow-hidden border border-black/5 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(0,0,0,0.08)] hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between cursor-pointer">
           <div class="w-full h-56 sm:h-64 bg-[#F5F5F7] overflow-hidden relative border-b border-black/5">
-            <img src="ap-1.jpg" alt="Studio Smart Itaquera" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+            <img src="ap-1.jpg" alt="Studio Smart Itaquera" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
             <div class="absolute top-3 left-3 bg-[#1D1D1F]/90 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">
               Na Planta
             </div>
@@ -646,7 +678,7 @@
         <div
           class="property-card group bg-white rounded-2xl overflow-hidden border border-black/5 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(0,0,0,0.08)] hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between cursor-pointer">
           <div class="w-full h-56 sm:h-64 bg-[#F5F5F7] overflow-hidden relative border-b border-black/5">
-            <img src="ap-2.webp" alt="Apartamento Residencial Jardim das Flores" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+            <img src="ap-2.webp" alt="Apartamento Residencial Jardim das Flores" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
             <div class="absolute top-3 left-3 bg-[#1D1D1F]/90 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">
               Venda
             </div>
@@ -694,7 +726,7 @@
         <div
           class="property-card group bg-white rounded-2xl overflow-hidden border border-black/5 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(0,0,0,0.08)] hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between cursor-pointer">
           <div class="w-full h-56 sm:h-64 bg-[#F5F5F7] overflow-hidden relative border-b border-black/5">
-            <img src="casa-1.avif" alt="Sobrado em Condomínio Fechado" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+            <img src="casa-1.avif" alt="Sobrado em Condomínio Fechado" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
             <div class="absolute top-3 left-3 bg-[#1D1D1F]/90 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">
               Venda
             </div>
@@ -1354,11 +1386,11 @@
         <div class="flex items-center gap-3">
           <div
             class="w-9 h-9 rounded-xl bg-[#1D1D1F] text-white font-bold flex items-center justify-center font-sans shadow-sm">
-            A3</div>
-          <span class="font-bold text-lg text-[#1D1D1F] font-sans tracking-tight">A3 ESTÉTICA</span>
+            ED</div>
+          <span class="font-bold text-lg text-[#1D1D1F] font-sans tracking-tight">EDULOS IMOBILIÁRIA</span>
         </div>
         <p class="text-[#86868B] text-xs leading-relaxed font-sans font-light">
-          Estúdio de alta performance dedicado à preservação e elevação estética de supercarros e veículos especiais.
+          Assessoria imobiliária de alta performance dedicada a imóveis de alto padrão e propriedades exclusivas.
         </p>
       </div>
 
@@ -1379,7 +1411,7 @@
         <p class="text-[#86868B] leading-relaxed font-sans font-light">
           Segunda a Sexta: 08:00 - 19:00<br>
           Sábado: 08:00 - 14:00<br>
-          <span class="text-[#1D1D1F] font-normal">Domingo: Fechado (Recebimento VIP)</span>
+          <span class="text-[#1D1D1F] font-normal">Domingo: Fechado (Atendimento VIP)</span>
         </p>
       </div>
 
@@ -1403,10 +1435,10 @@
 
     <div
       class="max-w-7xl mx-auto pt-8 border-t border-black/10 flex flex-col sm:flex-row justify-between items-center gap-4 text-[11px] text-[#86868B] relative z-10 font-sans">
-      <div>© 2026 A3 Estética Automotiva. Todos os direitos reservados.</div>
+      <div>© 2026 Edulos Imobiliária. Todos os direitos reservados.</div>
       <div class="flex gap-6">
         <a href="#" class="hover:text-[#1D1D1F] transition-colors">Termos de Privacidade</a>
-        <a href="#" class="hover:text-[#1D1D1F] transition-colors">Garantia Ceramic Coating</a>
+        <a href="#" class="hover:text-[#1D1D1F] transition-colors">Atendimento Exclusivo</a>
       </div>
     </div>
   </footer>

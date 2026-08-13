@@ -15,7 +15,7 @@ export function Section2About() {
         <div className="mb-16">
           <div className="hud-text text-xs text-cyber-emerald mb-2">// 02. HISTÓRIA & ENGENHARIA</div>
           <h2 class="text-3xl sm:text-5xl font-black uppercase tracking-tight text-white">
-            SOBRE A <span class="text-gradient-emerald">A3 ESTÉTICA</span>
+            SOBRE A <span class="text-gradient-emerald">EDULOS IMOBILIÁRIA</span>
           </h2>
         </div>
 
@@ -25,7 +25,7 @@ export function Section2About() {
           <div id="aboutCar3D" className="relative group">
             <div className="absolute -inset-4 bg-gradient-to-r from-cyber-emerald/20 to-cyber-cyan/20 rounded-3xl blur-2xl opacity-60 group-hover:opacity-100 transition-opacity" />
             <div className="relative glass-panel rounded-2xl p-4 overflow-hidden border border-cyber-emerald/30">
-              <img src="portfolio_1.png" alt="Lamborghini SVJ A3 Estética" className="w-full h-80 sm:h-96 object-cover rounded-xl shadow-2xl" />
+              <img src="portfolio_1.png" alt="Edulos Imobiliária" className="w-full h-80 sm:h-96 object-cover rounded-xl shadow-2xl" />
               
               <div className="absolute bottom-6 left-6 right-6 glass-panel rounded-xl p-4 flex items-center justify-between font-mono text-xs border border-cyber-emerald/40">
                 <div>
@@ -48,7 +48,7 @@ export function Section2About() {
             </h3>
             
             <p className="text-gray-300 text-sm sm:text-base leading-relaxed mb-6 font-light">
-              Há mais de uma década, a <strong className="text-white">A3 Estética</strong> redefiniu o conceito de detalhamento automotivo de luxo no Brasil. Especializados na preparação, proteção de pintura (PPF) e restauração estética de modelos exóticos como Lamborghini, Ferrari, Porsche e McLaren.
+              Há mais de uma década, a <strong className="text-white">Edulos Imobiliária</strong> redefiniu o conceito de consultoria imobiliária de luxo no Brasil. Especializados na curadoria e negociação de propriedades de altíssimo padrão.
             </p>
 
             <p className="text-gray-400 text-sm sm:text-base leading-relaxed mb-8 font-light">
